@@ -1,0 +1,16 @@
+.wrap { display: grid; grid-template-columns: 1fr 380px; gap: 32px; padding: 32px; align-items: start; }
+.tabs { display: flex; gap: 8px; margin: 16px 0; }
+.tabs button { padding: 10px 14px; border-radius: 99px; border: 1px solid var(--line); background: #fff; font: inherit; cursor: pointer; }
+.tabs .on { background: var(--ink); color: #fff; }
+.tabla { padding: 0; overflow: hidden; }
+.rw { display: grid; grid-template-columns: 1.2fr 1.3fr 1.5fr .6fr .8fr; gap: 12px; align-items: center; width: 100%; padding: 14px 16px; border: 0; border-bottom: 1px solid #e6ebe8; background: #fff; font: inherit; text-align: left; cursor: pointer; }
+.rw.cab { background: var(--bg); cursor: default; font-weight: 700; }
+.rw.sel { background: var(--acc-bg); }
+.vacio { padding: 20px; }
+.chk { display: flex; gap: 10px; align-items: center; min-height: 44px; }
+.info { margin: 14px 0; padding: 12px 14px; background: var(--acc-bg); border-radius: 10px; font-size: 13px; }
+.mt { margin-top: 10px; }
+
+@media (max-width: 1000px) {
+  .wrap { grid-template-columns: 1fr; }
+}

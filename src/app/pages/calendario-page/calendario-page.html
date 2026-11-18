@@ -1,0 +1,40 @@
+<div class="wrap">
+  <div class="barra">
+    <h1>Calendario</h1>
+    <div>
+      <button (click)="mover(-7)">Semana anterior</button>
+      <button (click)="mover(7)">Semana siguiente</button>
+    </div>
+  </div>
+  <p class="muted">
+    Reservas aprobadas · semana del {{ lunes().toLocaleDateString('es-GT', { day: 'numeric', month: 'long' }) }}
+  </p>
+
+  <div class="card cal">
+    <div class="cab">
+      <span></span>
+      @for (d of dias(); track d.getTime()) {
+        <b>{{ d.toLocaleDateString('es-GT', { weekday: 'short', day: 'numeric' }) }}</b>
+      }
+    </div>
+
+    <div class="cuerpo">
+      <div>
+        @for (h of horas; track h) { <div class="hr">{{ h }}:00</div> }
+      </div>
+
+      @for (d of dias(); track d.getTime()) {
+        <div class="dia">
+          @for (x of columnas(d); track x.e.id) {
+            <div class="ev"
+                 [style.top.px]="top(x.e)" [style.height.px]="alto(x.e)"
+                 [style.left.%]="x.left" [style.width.%]="x.ancho"
+                 [style.background]="color(x.e)">
+              <b>{{ nombres(x.e) }}</b><br>{{ x.e.nombre }}<br>{{ hora(x.e.inicio) }}–{{ hora(x.e.fin) }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

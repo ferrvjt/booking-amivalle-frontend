@@ -1,0 +1,70 @@
+<div class="wrap">
+  <section>
+    <h1>Solicitudes</h1>
+
+    <div class="tabs">
+      @for (f of filtros; track f) {
+        <button [class.on]="filtro() === f" (click)="filtro.set(f)">{{ etiquetas[f] }} · {{ cuenta(f) }}</button>
+      }
+    </div>
+
+    <div class="card tabla">
+      <div class="rw cab muted">
+        <span>Solicitante</span><span>Espacio</span><span>Fecha y hora</span><span>Total</span><span>Estado</span>
+      </div>
+      @for (s of lista(); track s.id) {
+        <button class="rw" [class.sel]="seleccion() === s.id" (click)="elegir(s)">
+          <b>{{ s.nombre }}</b>
+          <span>
+            {{ nombres(s) }}
+            @if (usaLocal(s)) { <br><span class="muted">Aviso con más anticipación</span> }
+          </span>
+          <span>{{ rango(s.inicio, s.fin) }}</span>
+          <span>{{ q(s.total) }}</span>
+          <span><span class="badge" [class]="s.estado">{{ etiquetas[s.estado] }}</span></span>
+        </button>
+      } @empty {
+        <p class="muted vacio">No hay solicitudes en esta pestaña.</p>
+      }
+    </div>
+  </section>
+
+  <aside class="card">
+    @if (actual(); as s) {
+      <h2>{{ s.nombre }}</h2>
+      <p class="muted">{{ s.correo }} · {{ s.telefono }}</p>
+      <p><b>{{ nombres(s) }}</b><br><span class="muted">{{ rango(s.inicio, s.fin) }}</span></p>
+
+      <div class="fila"><span>Subtotal</span><span>{{ q(s.subtotal) }}</span></div>
+      @if (s.descuento) {
+        <div class="fila desc"><span>Descuento estudiante</span><span>−{{ q(s.descuento) }}</span></div>
+      }
+      <div class="fila total"><span>Total</span><span>{{ q(s.total) }}</span></div>
+
+      @if (s.esEstudiante) {
+        <label class="chk">
+          <input type="checkbox" [checked]="s.carneVerificado"
+                 (change)="store.setCarne(s.id, $any($event.target).checked)"> Carné verificado
+        </label>
+        <p class="muted">Si apruebas sin verificar el carné, se quita el descuento.</p>
+      }
+
+      @if (s.estado === 'PENDIENTE') {
+        <div class="info">
+          Al aprobar se creará el evento en Google Calendar, con una notificación
+          {{ duracion(aviso(s).notificacion) }} antes y un correo {{ duracion(aviso(s).correo) }} antes.
+        </div>
+        @if (error()) { <p class="err" role="alert">{{ error() }}</p> }
+        <button class="btn" (click)="aprobar(s)">Aprobar</button>
+
+        <label class="lb mt" for="m">Motivo del rechazo</label>
+        <input id="m" class="in" [(ngModel)]="motivo">
+        <button class="btn sec mt" (click)="rechazar(s)">Rechazar</button>
+      } @else if (s.motivoRechazo) {
+        <p class="muted">Motivo: {{ s.motivoRechazo }}</p>
+      }
+    } @else {
+      <p class="muted">Elige una solicitud para ver el detalle.</p>
+    }
+  </aside>
+</div>
